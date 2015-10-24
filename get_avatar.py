@@ -9,14 +9,14 @@ import requests
 import shutil
 
 # PARSE COMMAND LINE ARGUMENTS
-
 parser = argparse.ArgumentParser()
 parser.add_argument('username')
 args = parser.parse_args()
+
 # CALL THE GITHUB API AND GET USER INFO
 request_url = 'https://api.github.com/users/' + args.username
-
 result = requests.get(request_url)
+
 if result.ok:
     user_info = json.loads(result.content)
     avatar_url = user_info['avatar_url']
@@ -25,9 +25,10 @@ else:
         .format(args.username)
                     )
     sys.exit()
+
 # DOWNLOAD AND SAVE IMAGE FILE
 I = requests.get(avatar_url, stream=True)
 if I.ok:
     
     with open(args.username + '.png', 'wb') as outfile:
-        shutil.copyfileobj(I.raw, outfile )
+        shutil.copyfileobj(I.raw, outfile)
