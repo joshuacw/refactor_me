@@ -8,22 +8,22 @@ import shutil
 
 # PARSE COMMAND LINE ARGUMENTS
 
-PARSER = argparse.ArgumentParser()
-PARSER.add_argument(  'username')
-ARGS = PARSER.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument(  'username')
+args = parser.parse_args()
 # CALL THE GITHUB API AND GET USER INFO
-RequestUrl = 'https://api.github.com/users/' + ARGS.username
+RequestUrl = 'https://api.github.com/users/' + args.username
 
-RESULT = requests.get( RequestUrl )
-if RESULT.ok :
-    user_info = json.loads(RESULT.content)
+result = requests.get( RequestUrl )
+if result.ok :
+    user_info = json.loads(result.content)
     avatarURL = user_info['avatar_url']
 else:
-    sys.stderr.write( "Error fetching user information for {0}; exiting now, sorry...\n".format(ARGS.username) )
+    sys.stderr.write( "Error fetching user information for {0}; exiting now, sorry...\n".format(args.username) )
     sys.exit()
 # DOWNLOAD AND SAVE IMAGE FILE
 I = requests.get(avatarURL , stream=True)
 if I.ok:
     
-    with open(ARGS.username + '.png' , 'wb') as OuTfIle:
-        shutil.copyfileobj( I.raw,  OuTfIle )
+    with open(args.username + '.png' , 'wb') as outfile:
+        shutil.copyfileobj( I.raw,  outfile )
